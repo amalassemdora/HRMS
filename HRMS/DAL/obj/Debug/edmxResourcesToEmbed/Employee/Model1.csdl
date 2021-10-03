@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HrModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="HrEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DailyAttends" EntityType="HrModel.DailyAttend" />
+    <EntitySet Name="Employees" EntityType="HrModel.Employee" />
+    <EntitySet Name="Weekends" EntityType="HrModel.Weekend" />
+    <AssociationSet Name="FK_DailyAttend_Employee" Association="HrModel.FK_DailyAttend_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="DailyAttend" EntitySet="DailyAttends" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Weekend_Employee" Association="HrModel.FK_Weekend_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Weekend" EntitySet="Weekends" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="DailyAttend">
+    <Key>
+      <PropertyRef Name="Emp_Id" />
+      <PropertyRef Name="Day" />
+      <PropertyRef Name="Month" />
+      <PropertyRef Name="Year" />
+    </Key>
+    <Property Name="Emp_Id" Type="Int32" Nullable="false" />
+    <Property Name="Day" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Month" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Year" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Attended" Type="Boolean" Nullable="false" />
+    <Property Name="Attendance" Type="Time" Precision="7" />
+    <Property Name="Leave" Type="Time" Precision="7" />
+    <NavigationProperty Name="Employee" Relationship="HrModel.FK_DailyAttend_Employee" FromRole="DailyAttend" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Mobile" Type="String" MaxLength="13" FixedLength="true" Unicode="true" />
+    <Property Name="HiringDate" Type="DateTime" Precision="0" />
+    <Property Name="Salary" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="AttendTime" Type="Time" Precision="7" />
+    <Property Name="LeaveTime" Type="Time" Precision="7" />
+    <NavigationProperty Name="DailyAttends" Relationship="HrModel.FK_DailyAttend_Employee" FromRole="Employee" ToRole="DailyAttend" />
+    <NavigationProperty Name="Weekends" Relationship="HrModel.FK_Weekend_Employee" FromRole="Employee" ToRole="Weekend" />
+  </EntityType>
+  <EntityType Name="Weekend">
+    <Key>
+      <PropertyRef Name="Emp_Id" />
+      <PropertyRef Name="Weekend1" />
+    </Key>
+    <Property Name="Emp_Id" Type="Int32" Nullable="false" />
+    <Property Name="Weekend1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employee" Relationship="HrModel.FK_Weekend_Employee" FromRole="Weekend" ToRole="Employee" />
+  </EntityType>
+  <Association Name="FK_DailyAttend_Employee">
+    <End Type="HrModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="HrModel.DailyAttend" Role="DailyAttend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DailyAttend">
+        <PropertyRef Name="Emp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Weekend_Employee">
+    <End Type="HrModel.Employee" Role="Employee" Multiplicity="1" />
+    <End Type="HrModel.Weekend" Role="Weekend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Weekend">
+        <PropertyRef Name="Emp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HrModelStoreContainer" CdmEntityContainer="HrEntities">
+    <EntitySetMapping Name="DailyAttends">
+      <EntityTypeMapping TypeName="HrModel.DailyAttend">
+        <MappingFragment StoreEntitySet="DailyAttend">
+          <ScalarProperty Name="Leave" ColumnName="Leave" />
+          <ScalarProperty Name="Attendance" ColumnName="Attendance" />
+          <ScalarProperty Name="Attended" ColumnName="Attended" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Month" ColumnName="Month" />
+          <ScalarProperty Name="Day" ColumnName="Day" />
+          <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="HrModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="LeaveTime" ColumnName="LeaveTime" />
+          <ScalarProperty Name="AttendTime" ColumnName="AttendTime" />
+          <ScalarProperty Name="Salary" ColumnName="Salary" />
+          <ScalarProperty Name="HiringDate" ColumnName="HiringDate" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Weekends">
+      <EntityTypeMapping TypeName="HrModel.Weekend">
+        <MappingFragment StoreEntitySet="Weekend">
+          <ScalarProperty Name="Weekend1" ColumnName="Weekend" />
+          <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

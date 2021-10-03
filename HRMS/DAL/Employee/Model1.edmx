@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HrModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DailyAttend">
+          <Key>
+            <PropertyRef Name="Emp_Id" />
+            <PropertyRef Name="Day" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Emp_Id" Type="int" Nullable="false" />
+          <Property Name="Day" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Month" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Year" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Attended" Type="bit" Nullable="false" />
+          <Property Name="Attendance" Type="time" Precision="7" />
+          <Property Name="Leave" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile" Type="nchar" MaxLength="13" />
+          <Property Name="HiringDate" Type="date" />
+          <Property Name="Salary" Type="nchar" MaxLength="10" />
+          <Property Name="AttendTime" Type="time" Precision="7" />
+          <Property Name="LeaveTime" Type="time" Precision="7" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Hr.dbo.Weekend' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Weekend">
+          <Key>
+            <PropertyRef Name="Emp_Id" />
+            <PropertyRef Name="Weekend" />
+          </Key>
+          <Property Name="Emp_Id" Type="int" Nullable="false" />
+          <Property Name="Weekend" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DailyAttend_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="DailyAttend" Type="Self.DailyAttend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DailyAttend">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Weekend_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Weekend" Type="Self.Weekend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Weekend">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HrModelStoreContainer">
+          <EntitySet Name="DailyAttend" EntityType="Self.DailyAttend" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Weekend" EntityType="Self.Weekend" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Weekend].[Emp_Id] AS [Emp_Id], 
+    [Weekend].[Weekend] AS [Weekend]
+    FROM [dbo].[Weekend] AS [Weekend]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_DailyAttend_Employee" Association="Self.FK_DailyAttend_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="DailyAttend" EntitySet="DailyAttend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Weekend_Employee" Association="Self.FK_Weekend_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Weekend" EntitySet="Weekend" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HrModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HrEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DailyAttends" EntityType="HrModel.DailyAttend" />
+          <EntitySet Name="Employees" EntityType="HrModel.Employee" />
+          <EntitySet Name="Weekends" EntityType="HrModel.Weekend" />
+          <AssociationSet Name="FK_DailyAttend_Employee" Association="HrModel.FK_DailyAttend_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="DailyAttend" EntitySet="DailyAttends" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Weekend_Employee" Association="HrModel.FK_Weekend_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Weekend" EntitySet="Weekends" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DailyAttend">
+          <Key>
+            <PropertyRef Name="Emp_Id" />
+            <PropertyRef Name="Day" />
+            <PropertyRef Name="Month" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="Emp_Id" Type="Int32" Nullable="false" />
+          <Property Name="Day" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Month" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Year" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Attended" Type="Boolean" Nullable="false" />
+          <Property Name="Attendance" Type="Time" Precision="7" />
+          <Property Name="Leave" Type="Time" Precision="7" />
+          <NavigationProperty Name="Employee" Relationship="HrModel.FK_DailyAttend_Employee" FromRole="DailyAttend" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="13" FixedLength="true" Unicode="true" />
+          <Property Name="HiringDate" Type="DateTime" Precision="0" />
+          <Property Name="Salary" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="AttendTime" Type="Time" Precision="7" />
+          <Property Name="LeaveTime" Type="Time" Precision="7" />
+          <NavigationProperty Name="DailyAttends" Relationship="HrModel.FK_DailyAttend_Employee" FromRole="Employee" ToRole="DailyAttend" />
+          <NavigationProperty Name="Weekends" Relationship="HrModel.FK_Weekend_Employee" FromRole="Employee" ToRole="Weekend" />
+        </EntityType>
+        <EntityType Name="Weekend">
+          <Key>
+            <PropertyRef Name="Emp_Id" />
+            <PropertyRef Name="Weekend1" />
+          </Key>
+          <Property Name="Emp_Id" Type="Int32" Nullable="false" />
+          <Property Name="Weekend1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="HrModel.FK_Weekend_Employee" FromRole="Weekend" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_DailyAttend_Employee">
+          <End Type="HrModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="HrModel.DailyAttend" Role="DailyAttend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DailyAttend">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Weekend_Employee">
+          <End Type="HrModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="HrModel.Weekend" Role="Weekend" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Weekend">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HrModelStoreContainer" CdmEntityContainer="HrEntities">
+          <EntitySetMapping Name="DailyAttends">
+            <EntityTypeMapping TypeName="HrModel.DailyAttend">
+              <MappingFragment StoreEntitySet="DailyAttend">
+                <ScalarProperty Name="Leave" ColumnName="Leave" />
+                <ScalarProperty Name="Attendance" ColumnName="Attendance" />
+                <ScalarProperty Name="Attended" ColumnName="Attended" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="HrModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="LeaveTime" ColumnName="LeaveTime" />
+                <ScalarProperty Name="AttendTime" ColumnName="AttendTime" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="HiringDate" ColumnName="HiringDate" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Weekends">
+            <EntityTypeMapping TypeName="HrModel.Weekend">
+              <MappingFragment StoreEntitySet="Weekend">
+                <ScalarProperty Name="Weekend1" ColumnName="Weekend" />
+                <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

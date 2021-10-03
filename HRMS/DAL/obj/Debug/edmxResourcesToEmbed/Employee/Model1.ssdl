@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HrModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DailyAttend">
+    <Key>
+      <PropertyRef Name="Emp_Id" />
+      <PropertyRef Name="Day" />
+      <PropertyRef Name="Month" />
+      <PropertyRef Name="Year" />
+    </Key>
+    <Property Name="Emp_Id" Type="int" Nullable="false" />
+    <Property Name="Day" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Month" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Year" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Attended" Type="bit" Nullable="false" />
+    <Property Name="Attendance" Type="time" Precision="7" />
+    <Property Name="Leave" Type="time" Precision="7" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="Mobile" Type="nchar" MaxLength="13" />
+    <Property Name="HiringDate" Type="date" />
+    <Property Name="Salary" Type="nchar" MaxLength="10" />
+    <Property Name="AttendTime" Type="time" Precision="7" />
+    <Property Name="LeaveTime" Type="time" Precision="7" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Hr.dbo.Weekend' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Weekend">
+    <Key>
+      <PropertyRef Name="Emp_Id" />
+      <PropertyRef Name="Weekend" />
+    </Key>
+    <Property Name="Emp_Id" Type="int" Nullable="false" />
+    <Property Name="Weekend" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_DailyAttend_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="DailyAttend" Type="Self.DailyAttend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DailyAttend">
+        <PropertyRef Name="Emp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Weekend_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Weekend" Type="Self.Weekend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Weekend">
+        <PropertyRef Name="Emp_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HrModelStoreContainer">
+    <EntitySet Name="DailyAttend" EntityType="Self.DailyAttend" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Weekend" EntityType="Self.Weekend" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Weekend].[Emp_Id] AS [Emp_Id], 
+    [Weekend].[Weekend] AS [Weekend]
+    FROM [dbo].[Weekend] AS [Weekend]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_DailyAttend_Employee" Association="Self.FK_DailyAttend_Employee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="DailyAttend" EntitySet="DailyAttend" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Weekend_Employee" Association="Self.FK_Weekend_Employee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="Weekend" EntitySet="Weekend" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

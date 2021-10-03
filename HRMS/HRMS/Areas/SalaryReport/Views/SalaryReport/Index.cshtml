@@ -1,0 +1,75 @@
+﻿@model List<BL.Classes.Emp>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_HRLayout.cshtml";
+
+
+}
+@using (Ajax.BeginForm("Search", "SalaryReport", new AjaxOptions { UpdateTargetId = "div1" }))
+{
+    <div class="row">
+        <div class="col-lg-5">
+            <input type="text" name="Month" class="form-control" />
+        </div>
+        <div class="col-lg-5">
+            <input type="text" name="Year" class="form-control" />
+        </div>
+        <div class="col-lg-1">
+            <input type="submit" value="Search" class="form-control " />
+        </div>
+    </div>
+}
+<br />
+
+<div id="div1">
+    <table class="table table-hover ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Basic Salary</th>
+                <th scope="col">#Attended</th>
+                <th scope="col">#Absence</th>
+                <th scope="col">#overtime</th>
+                <th scope="col">#Discount</th>
+                <th scope="col">overtime</th>
+                <th scope="col">deductions</th>
+                <th scope="col">Net salary</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var index = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@index</th>
+                    <td>@item.Name</td>
+                    <td>@item.Salary</td>
+                    <td>@(ViewBag.salaryreport.GetAttendedDays(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.GetAbsenceDays(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.Getovertime(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.Getdeductiontime(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.GetAmountOfOvertime(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.GetAmountOfDeductiontime(@item.Id, ViewBag.month, ViewBag.year))</td>
+                    <td>@(ViewBag.salaryreport.GetNetSalary(@item.Id, ViewBag.month, ViewBag.year))</td>
+                </tr>
+                index = index + 1;
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+<br />
+<center>
+    <div class="col-lg-4">
+        @* @Html.ActionLink("Create Pdf", "CreatePdf", "SalaryReport")*@
+        <a href="/SalaryReport/SalaryReport/CreatePdf" class="btn btn-primary text-white">Create Pdf</a>
+    </div>
+</center>
+@section Scripts{
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}
